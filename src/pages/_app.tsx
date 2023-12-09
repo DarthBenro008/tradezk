@@ -60,9 +60,9 @@ export default function App({ Component, pageProps }: AppProps) {
       {ready ? (
         <SnackbarProvider>
           <AnonAadhaarProvider _appId={app_id} _isWeb={false}>
-            {/* <Web3ModalProvider> */}
+            <Web3ModalProvider>
               <Component {...pageProps} />
-            {/* </Web3ModalProvider> */}
+            </Web3ModalProvider>
           </AnonAadhaarProvider>
         </SnackbarProvider>
       ) : null}

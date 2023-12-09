@@ -13,7 +13,7 @@ import {
 import Image from "next/image";
 import UsdcLogo from "../../../public/usdc.svg";
 
-export default function BuyerCard() {
+export default function BuyerCard({unit, qty, amount}) {
   return (
     <Card className="mx-4 mt-5">
       <CardHeader className="p-3">
@@ -21,7 +21,7 @@ export default function BuyerCard() {
           <div className="flex-shrink-0">
             <Image src={UsdcLogo} alt="usdc" />
           </div>
-          <div className="flex-shrink-0 text-xl font-semibold ">Rs 95.9</div>
+          <div className="flex-shrink-0 text-xl font-semibold ">Rs {unit ?? 90}</div>
           <div className="flex-shrink-0 text-zinc-400 font-normal mt-0.5 ">
             /Unit
           </div>
@@ -46,7 +46,7 @@ export default function BuyerCard() {
                 </div>
                 <div>
                   <p className="text-neutral-50 text-md font-semibold pl-1 mb-1">
-                    200
+                    {qty ?? 200}
                   </p>
                 </div>
               </div>
@@ -64,7 +64,7 @@ export default function BuyerCard() {
                 </div>
                 <div>
                   <p className="text-neutral-50 text-md font-semibold pl-1 mb-1">
-                    200
+                    {amount ?? 200}
                   </p>
                 </div>
               </div>

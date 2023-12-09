@@ -303,6 +303,7 @@ export default class TradezkContract {
         upi: x[3],
         rate: x[4],
         deleted: x[5],
+        rs: Number(x[2]) * Number(x[4]),
       };
       return y;
     });
@@ -310,7 +311,13 @@ export default class TradezkContract {
 
   generateCode() {
     const iface = new Interface(abi);
-    const data = iface.encodeFunctionData("sendTestNotification", []);
+    const data = iface.encodeFunctionData("registerReputation", []);
+    return data;
+  }
+
+  generateCodeForCreateOrder(amount, upi, rate) {
+    const iface = new Interface(abi);
+    const data = iface.encodeFunctionData("createOrder", [amount, upi, rate]);
     return data;
   }
 }

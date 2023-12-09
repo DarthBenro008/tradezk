@@ -165,7 +165,7 @@ const abi = [
   },
 ];
 
-export default class TradezkContract {
+export default class UsdcContract {
   _signer;
   _contract;
   constructor(signer) {
@@ -177,10 +177,23 @@ export default class TradezkContract {
     );
   }
 
-  async balance() {
-    const rep = await this._contract.balanceOf(
-      "0xad18c8ac2F189Ca0a715122a46ef9ACB3dD6Bb5E"
-    );
+  async balance(address) {
+    const rep = await this._contract.balanceOf(address);
     return Number(rep) * Math.pow(10, -17);
+  }
+
+  async getCodeForIssue() {
+    const iface = new Interface(abi);
+    const data = iface.encodeFunctionData("issueToken", []);
+    return data;
+  }
+
+  async getCodeForApproval() {
+    const iface = new Interface(abi);
+    const data = iface.encodeFunctionData("approve", [
+      "0x3D2DE24CF696eBe80dD768029b597A9b0e750c0A",
+      1000,
+    ]);
+    return data;
   }
 }

@@ -20,7 +20,7 @@ import Image from "next/image";
 import UsdcLogo from "../../public/usdc.svg";
 import BuyerCard from "@/components/buyer/buyercard";
 
-export default function Payment() {
+export default function Payment({ payment, data, qr }) {
   return (
     <div className=" text-white">
       <div>
@@ -28,7 +28,7 @@ export default function Payment() {
           <div className="mt-10 items-end px-4">
             <div className="flex justify-between">
               <div className="flex flex-row space-x-1">
-                <ArrowLeft className="h-4 mt-0.5"/>
+                <ArrowLeft className="h-4 mt-0.5" />
                 <p className="text-neutral-50 text-sm font-semibold">
                   Pay INR to recieve USDC
                 </p>
@@ -62,12 +62,17 @@ export default function Payment() {
                   </div>
                 </div>
                 <div className="flex space-x-1 mt-1">
-                  <p className="text-neutral-50 font-semibold">hello@paytm</p>
+                  <p className="text-neutral-50 font-semibold">
+                    {data.upi ?? "hello@paytm"}
+                  </p>
                   <Copy className="text-zinc-400 h-4 mt-1" />
                 </div>
               </div>
             </div>
-            <Button className="w-full mt-2"> Pay Through UPI</Button>
+            <Button onClick={() => qr()} className="w-full mt-2">
+              {" "}
+              Pay Through UPI
+            </Button>
           </div>
         </div>
 
@@ -90,7 +95,7 @@ export default function Payment() {
                   </div>
                   <div>
                     <p className="text-neutral-50 text-lg font-semibold pl-1 mb-1">
-                      200 USDC
+                      {data.amount} USDC
                     </p>
                   </div>
                 </div>
@@ -120,7 +125,7 @@ export default function Payment() {
                 </div>
                 <div className="mt-2">
                   <p className="text-neutral-50 text-3xl font-semibold ">
-                    Rs 16,834
+                    Rs {data.rs ?? 16342}
                   </p>
                 </div>
               </div>
@@ -130,7 +135,11 @@ export default function Payment() {
           {/* Upload */}
           <div className="pt-4">
             <p>Upload UPI Transaction Screenshot</p>
-            <Button variant="outline" className="mt-2 w-full">
+            <Button
+              onClick={() => payment()}
+              variant="outline"
+              className="mt-2 w-full"
+            >
               Choose File
             </Button>
             <p className="text-zinc-400 text-sm mt-2">

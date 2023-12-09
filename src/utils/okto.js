@@ -13,31 +13,6 @@ export default class OktoWallet {
     this._vendor = vendor;
   }
 
-
-  async lol(){
-    let data = JSON.stringify({
-        "id_token": "eyJhbGciOiJSUzI1NiIsImtpZCI6ImU0YWRmYjQzNmI5ZTE5N2UyZTExMDZhZjJjODQyMjg0ZTQ5ODZhZmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTYxNDM3ODAyODA4MTIzOTI0MTQiLCJlbWFpbCI6ImhrcGRldjAwOEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6InZxWkVEUnhPV0NkZ1FEYlBKcDZxb1EiLCJpYXQiOjE3MDIxMTI3OTUsImV4cCI6MTcwMjExNjM5NX0.bVcGh_icaMNjgjq5TDzrP0fBUNvZ8NcpZnjXlUfL2Qqrzksg4TItunKR8NAZGduJnFh-2aoYJtz29rRCr-bHajeypxrw_0o82Pdb_fdKJ5dM-LrCgXOgSAesPHaiDyBqFZpdGBcCBfg8Nc1TU-GuHaAehbxV3e3C33XtTJx1XhDasg9qqtWX--eqKhB3poKeiWwTCnLYoqk4h5zMShsPa7TFxJlVAkh5LRwoO70d_Bt_ZxvXbZOYHDDEN-92qBtrS01OxEKxmCRufjz7da1ct6suSEWXH8tNSvGDVt83hYyRDmJtV2O0KTURaXKOI336tcFHZGyE1Al54QyrmbDBdA"
-      });
-      
-      let config = {
-        method: 'post',
-        maxBodyLength: Infinity,
-        url: 'https://3p-bff.oktostage.com/api/v1/authenticate',
-        headers: { 
-          'x-api-key': 'b67539fd-60d1-4469-8db2-8ade89d63d37', 
-          'Content-Type': 'application/json', 
-        },
-        data : data
-      };
-      
-      axios.request(config)
-      .then((response) => {
-        console.log(JSON.stringify(response.data));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
   // 1. Call `/api/v1/authenticate` endpoint to get an access token
   async authenticate(pin) {
     let { data } = await axios.post(
@@ -87,7 +62,7 @@ export default class OktoWallet {
       {
         headers: {
           "x-api-key": this._vendor,
-          authorization: `Bearer ${this._gtoken}`,
+          authorization: `Bearer ${this._token}`,
         },
       }
     );
@@ -96,31 +71,44 @@ export default class OktoWallet {
   }
 
   async fetch_network() {
-    const { data } = await axios.get(`${this._base}/api/v1/supported/networks`, {
+    const { data } = await axios.get(
+      `${this._base}/api/v1/supported/networks`,
+      {
+        headers: {
+          "x-api-key": this._vendor,
+          authorization: `Bearer ${this._token}`,
+        },
+      }
+    );
+    return data.network;
+  }
+
+  async get_wallet() {
+    const { data } = await axios.get(`${this._base}/api/v1/wallet`, {
       headers: {
         "x-api-key": this._vendor,
         authorization: `Bearer ${this._token}`,
       },
     });
-    return data.network;
+    return data.data.wallets[0];
   }
 
-  async execute_raw_transaction(from, to, tx_data, value) {
+  async execute_raw_transaction(tradezk, tx_data) {
     const { data } = await axios.post(
       `${this._base}/api/v1/rawtransaction/execute`,
       {
         network_name: "POLYGON_TESTNET",
         transaction: {
-          from: from,
-          to: to,
+          from: localStorage.getItem("address"),
+          to: tradezk ? this.tradezk_address : this.usdc_address,
           data: tx_data,
-          value: 0,
+          value: "0x0",
         }, // raw transaction
       },
       {
         headers: {
           "x-api-key": this._vendor,
-          authorization: `Bearer ${this._gtoken}`,
+          authorization: `Bearer ${this._token}`,
         },
       }
     );

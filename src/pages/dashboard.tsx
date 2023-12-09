@@ -21,38 +21,46 @@ import {
 } from "@/components/ui/card";
 import { PlusCircle, Send, Wallet } from "lucide-react";
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
+
 
 export default function Dashboard() {
   const router = useRouter();
   const { walletProvider } = useWeb3ModalProvider();
   const { address, chainId, isConnected } = useWeb3ModalAccount();
+  const [balance, setBalance] = useState(0);
+
+  const okto = new OktoWallet(
+    "",
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb2luZGN4X2lkIjoiYjAzZDMzNDItMzFkZS00MWNlLThhZWQtMjhjODJkODRhZGYwIiwidXNlcl9pZCI6ImIwM2QzMzQyLTMxZGUtNDFjZS04YWVkLTI4YzgyZDg0YWRmMCIsInNoYXJlZF9pZCI6bnVsbCwicG9ydGZvbGlvRmFjdG9yIjoiMSIsInNlc3Npb25JZCI6IjkzMjE4MDQ4LWE5MTMtNDI0NS04ZjJiLTgyOTM0NDdjY2I0NyIsInVzZXJfbG9naW5fdmVuZG9yX2lkIjoiNTU0OGEzZDUtOTZhZC00NTRlLTgwYjYtNjJjMjg1NDNkMzJkIiwicyI6Im9rdG9fYW5kcm9pZCIsInNpcCI6Ijo6ZmZmZjoxMjcuMC4wLjYiLCJvdiI6Im9rdG9fcGx1cyIsImxvZ2luX21lZGl1bSI6IkdfQVVUSCIsImlhdCI6MTcwMjE1ODE5NSwiZXhwIjoxNzAzMDIyMTk1fQ.GL_iN3Y_5JkDVWbVivfLW1RCZJBqQNKmuDCEPm6LdoM",
+    "b67539fd-60d1-4469-8db2-8ade89d63d37"
+  );
 
   const smartCall = async () => {
-    console.log("hi");
     const ethersProvider = new BrowserProvider(walletProvider);
-    const signer = await ethersProvider.getSigner();
-    const contract = new TradezkContract(signer);
-    const usdcContract = new UsdcContract(signer);
-    await contract.reputation();
-    const balance = await usdcContract.balance();
-    const orders = await contract.orders();
+    const usdcContract = new UsdcContract(ethersProvider);
+    const balance = await usdcContract.balance(localStorage.getItem("address"));
+    localStorage.setItem("balance", String(balance));
+    setBalance(balance);
     console.log(balance);
-    console.log(orders);
   };
 
   const oktoCall = async () => {
-    const okto = new OktoWallet(
-      "eyJhbGciOiJSUzI1NiIsImtpZCI6ImU0YWRmYjQzNmI5ZTE5N2UyZTExMDZhZjJjODQyMjg0ZTQ5ODZhZmYiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL2FjY291bnRzLmdvb2dsZS5jb20iLCJhenAiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJhdWQiOiI0MDc0MDg3MTgxOTIuYXBwcy5nb29nbGV1c2VyY29udGVudC5jb20iLCJzdWIiOiIxMTYxNDM3ODAyODA4MTIzOTI0MTQiLCJlbWFpbCI6ImhrcGRldjAwOEBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6dHJ1ZSwiYXRfaGFzaCI6InZxWkVEUnhPV0NkZ1FEYlBKcDZxb1EiLCJpYXQiOjE3MDIxMTI3OTUsImV4cCI6MTcwMjExNjM5NX0.bVcGh_icaMNjgjq5TDzrP0fBUNvZ8NcpZnjXlUfL2Qqrzksg4TItunKR8NAZGduJnFh-2aoYJtz29rRCr-bHajeypxrw_0o82Pdb_fdKJ5dM-LrCgXOgSAesPHaiDyBqFZpdGBcCBfg8Nc1TU-GuHaAehbxV3e3C33XtTJx1XhDasg9qqtWX--eqKhB3poKeiWwTCnLYoqk4h5zMShsPa7TFxJlVAkh5LRwoO70d_Bt_ZxvXbZOYHDDEN-92qBtrS01OxEKxmCRufjz7da1ct6suSEWXH8tNSvGDVt83hYyRDmJtV2O0KTURaXKOI336tcFHZGyE1Al54QyrmbDBdA",
-      "",
-      "b67539fd-60d1-4469-8db2-8ade89d63d37"
-    );
-    const data = await okto.lol();
-    //     const { auth_token, refresh_auth_token, device_token } =
-    //       await okto.authenticate("ggwp");
-    //     console.log(auth_token, refresh_auth_token, device_token);
-    //     const data = await okto.fetch_network()
-    //     console.log(data);
+    const data = await okto.get_wallet();
+    localStorage.setItem("address", data.address);
   };
+
+  const testCall = async () => {
+    const usdcContract = new UsdcContract();
+    const code = await usdcContract.getCodeForApproval();
+    const data = await okto.execute_raw_transaction(false, code);
+    console.log(data);
+  };
+
+  useEffect(() => {
+    oktoCall();
+    smartCall();
+  });
 
   return (
     <div className="px-6">
@@ -77,8 +85,12 @@ export default function Dashboard() {
         <Card className="border-0 w-full mt-10 bg-banner bg-no-repeat text-white">
           <CardContent>
             <p className="pt-4">Wallet Balance</p>
-            <p className="pt-2 text-2xl font-semibold">32 USDC</p>
-            <p className="pt-2 text-neutral-50">~ 2400rs</p>
+            <p className="pt-2 text-2xl font-semibold">
+              {Math.trunc(balance) ?? 320} USDC
+            </p>
+            <p className="pt-2 text-neutral-50">
+              ~ {Math.trunc(balance * 86)} rs
+            </p>
           </CardContent>
           <CardFooter>
             <Button
@@ -96,7 +108,7 @@ export default function Dashboard() {
         <div className="mt-5 items-end">
           <div className="flex justify-between">
             <Button
-            onClick={() => oktoCall()}
+              onClick={() => router.push("/buyer")}
               className="px-10 border-zinc-800 text-white font-medium"
               variant="outline"
             >

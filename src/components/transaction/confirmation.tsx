@@ -14,15 +14,16 @@ import { Button } from "@/components/ui/button";
 import { ArchiveRestore, ArrowLeft, Currency } from "lucide-react";
 import Note from "../common/note";
 
-export default function TransactionConfirmation() {
+export default function TransactionConfirmation({ interest, data}) {
+ 
   return (
     <div>
       <div>
         <div>
           <div className="mt-10 items-end px-4">
             <div className="flex justify-between">
-            <div className="flex flex-row space-x-1">
-                <ArrowLeft className="h-4 mt-0.5"/>
+              <div className="flex flex-row space-x-1">
+                <ArrowLeft className="h-4 mt-0.5" />
                 <p className="text-neutral-50 text-sm font-semibold">
                   Confirm Transaction
                 </p>
@@ -42,7 +43,7 @@ export default function TransactionConfirmation() {
                 <Image src={UsdcLogo} alt="usdc" />
               </div>
               <div className="flex-shrink-0 text-xl font-semibold ">
-                Rs 95.9
+                Rs {data.rate}
               </div>
               <div className="flex-shrink-0 text-zinc-400 font-normal mt-0.5 ">
                 /Unit
@@ -70,7 +71,7 @@ export default function TransactionConfirmation() {
                     </div>
                     <div>
                       <p className="text-neutral-50 text-md font-semibold pl-1 mb-1">
-                        200
+                        {data.amount} USDC
                       </p>
                     </div>
                   </div>
@@ -88,7 +89,7 @@ export default function TransactionConfirmation() {
                     </div>
                     <div>
                       <p className="text-neutral-50 text-md font-semibold pl-1 mb-1">
-                        200
+                        Rs {data.rs}
                       </p>
                     </div>
                   </div>
@@ -100,7 +101,7 @@ export default function TransactionConfirmation() {
                   </div>
                   <div className="flex">
                     <p className="text-neutral-50 text-xl font-semibold ">
-                      83.4rs
+                      Rs {data.rs}
                     </p>
                   </div>
                 </div>
@@ -113,7 +114,15 @@ export default function TransactionConfirmation() {
           </div>
           {/* Button Element */}
           <div className="px-4">
-            <Button className="w-full" > Proceed </Button>
+            <Button
+              className="w-full"
+              onClick={() => {
+                interest();
+              }}
+            >
+              {" "}
+              Proceed{" "}
+            </Button>
           </div>
         </div>
       </div>

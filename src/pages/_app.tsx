@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       {ready ? (
         <Web3ModalProvider>
-          <AnonAadhaarProvider _appId={app_id}>
+          <AnonAadhaarProvider _appId={app_id} _isWeb={false}>
             <Component {...pageProps} />
           </AnonAadhaarProvider>
         </Web3ModalProvider>

@@ -15,7 +15,7 @@
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "@web3modal/ethers": "^3.4.0",
-    "anon-aadhaar-react": "^0.1.11",
+    "anon-aadhaar-react": "^0.1.14",
     "autoprefixer": "10.4.15",
     "axios": "^1.6.2",
     "class-variance-authority": "^0.7.0",

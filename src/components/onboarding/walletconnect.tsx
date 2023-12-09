@@ -11,8 +11,10 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Wallet } from "lucide-react";
+import { useWeb3Modal } from "@web3modal/ethers/react";
 
 export default function WalletConnect() {
+  const { open } = useWeb3Modal();
   return (
     <div className="bg-custom grid grid-rows-3 h-screen">
       <div className="flex items-start justify-center row-start-1">
@@ -34,7 +36,7 @@ export default function WalletConnect() {
             </p>
           </CardContent>
           <CardFooter>
-            <Button className="w-full bg-brand">
+            <Button onClick={() => open()} className="w-full bg-brand">
               {" "}
               <Wallet className="mr-2 h-4 w-4" /> Login/Register with Wallet
             </Button>

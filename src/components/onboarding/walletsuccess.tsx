@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FileSearch } from "lucide-react";
 
-export default function WalletSuccess() {
+export default function WalletSuccess({ increment }) {
   return (
     <div className="bg-custom grid grid-rows-3 h-screen">
       <div className="flex items-start justify-center row-start-1">
@@ -38,7 +38,10 @@ export default function WalletSuccess() {
             </CardDescription>
           </CardContent>
           <CardFooter className="p-4 pt-0">
-            <Button className="w-full bg-[#F9F9F9] text-[#17171B]">
+            <Button
+              onClick={() => increment()}
+              className="w-full "
+            >
               {" "}
               <FileSearch className="mr-2 h-4 w-4" /> Continue to Aadhar
               Verification

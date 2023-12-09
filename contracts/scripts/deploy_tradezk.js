@@ -7,19 +7,16 @@
 const hre = require("hardhat");
 
 async function main() {
-  const currentTimestampInSeconds = Math.round(Date.now() / 1000);
-  const unlockTime = currentTimestampInSeconds + 60;
 
-  const lockedAmount = hre.ethers.parseEther("0.001");
+  const Tradezk = await hre.ethers.getContractFactory("Tradezk");
+  const tradezk = await Tradezk.deploy("0xAf729D03090e5586B48F6e600ac8B5aC7959F8A7", "0xb3971BCef2D791bc4027BbfedFb47319A4AAaaAa"); // usdc testnet, push protocol
 
-  const lock = await hre.ethers.deployContract("Tradezk");
 
-  await lock.waitForDeployment();
+  await tradezk.waitForDeployment();
+ 
 
   console.log(
-    `Lock with ${ethers.formatEther(
-      lockedAmount
-    )}ETH and unlock timestamp ${unlockTime} deployed to ${lock.target}`
+    `TradeZK deployed to ${tradezk.target}`
   );
 }
 

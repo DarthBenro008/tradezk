@@ -16,6 +16,9 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        banner: "url('/card.svg')"
+      },
       colors: {
         brand: "#F58762",
         border: "hsl(var(--border))",

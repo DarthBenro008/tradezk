@@ -320,4 +320,10 @@ export default class TradezkContract {
     const data = iface.encodeFunctionData("createOrder", [amount, upi, rate]);
     return data;
   }
+
+  generateCodeForFullfill(orderId, zkProof) {
+    const iface = new Interface(abi);
+    const data = iface.encodeFunctionData("fulfillOrder", [orderId, zkProof]);
+    return data;
+  }
 }

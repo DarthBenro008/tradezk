@@ -55,9 +55,15 @@ export default function Seller() {
       upi,
       rate
     );
+    enqueueSnackbar("Publishing your order", { variant: "info" });
     okto
       .execute_raw_transaction(true, data)
-      .then((data) => {
+      .then(async (data) => {
+        enqueueSnackbar(
+          "Please wait for transaction to be broadcasted, might take upto 20 seconds",
+          { autoHideDuration: 15000 }
+        );
+        await new Promise((r) => setTimeout(r, 15000));
         setSuccess(true);
       })
       .catch((err) => {

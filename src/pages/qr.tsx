@@ -12,6 +12,7 @@ export default function Qr({ back }) {
     const hash = CryptoJS.SHA256(input);
     // Convert the hash to a hexadecimal string
     const hashHex = hash.toString(CryptoJS.enc.Hex);
+    localStorage.setItem("hash", hashHex);
     return hashHex;
   }
 
@@ -20,11 +21,9 @@ export default function Qr({ back }) {
       <div className="flex items-center justify-center h-screen flex-col">
         <Image
           className="flex"
-          text={`upi://pay?pa=${
-            data.upi
-          }&pn=Seller&am=${data.rs}&cu=INR&tn=${generateHash(
-            data.upi + data.amount + data.qty
-          )}`}
+          text={`upi://pay?pa=${data.upi}&pn=Seller&am=${
+            data.rs
+          }&cu=INR&tn=${generateHash(data.upi + data.amount + data.qty)}`}
           options={{
             type: "image/jpeg",
             quality: 0.3,

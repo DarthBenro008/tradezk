@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Input } from "@/components/ui/input";
 import {
   ArchiveRestore,
   ArrowLeft,
@@ -135,13 +136,14 @@ export default function Payment({ payment, data, qr }) {
           {/* Upload */}
           <div className="pt-4">
             <p>Upload UPI Transaction Screenshot</p>
-            <Button
+            {/* <Button
               onClick={() => payment()}
               variant="outline"
               className="mt-2 w-full"
             >
               Choose File
-            </Button>
+            </Button> */}
+            <Input onChange={payment} id="picture" type="file" />
             <p className="text-zinc-400 text-sm mt-2">
               Take screenshot of your payment from the specified UPI app
             </p>

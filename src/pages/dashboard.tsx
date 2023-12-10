@@ -1,5 +1,6 @@
 import Image from "next/image";
 import logo from "../../public/logoorange.svg";
+import empty from "../../public/empty.svg";
 import {
   useWeb3ModalProvider,
   useWeb3ModalAccount,
@@ -130,6 +131,9 @@ export default function Dashboard() {
           {" "}
           Order Activity
         </p>
+      </div>
+      <div>
+        <Image className="ml-2 mt-5" src={empty} />
       </div>
     </div>
   );
